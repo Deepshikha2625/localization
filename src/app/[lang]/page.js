@@ -1,12 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { getDictionary } from "../../../getDictionary";
-import { use } from "react";
-export default function getStaticProps({ params }) {
-  const lang = getDictionary(params.lang);
-  console.log("lang  - params :>> ", lang);
+import { use, useEffect, useState } from "react";
+export default function Page({ params }) {
+  const [lang, setLang] = useState();
+  useEffect(() => {
+    getDictionary(params.lang).then((lang) => {
+      setLang(lang);
+    });
+  }, [params.lang]);
   const router = useRouter();
-  console.log("router :>> ", router);
   const handleChange = (value) => {
     // const newPath = router.asPath.replace(/^\/(en|hi)/, "");
     // const newUrl = `/${lang}/${value}`;
@@ -17,7 +20,7 @@ export default function getStaticProps({ params }) {
 
   return (
     <>
-      {/* {lang.form.name} */}
+      <h3>{lang?.form?.name}</h3>
       <select onChange={(e) => handleChange(e.target.value)}>
         <option value={"en"}>english</option>
         <option value={"hi"}>Hindi</option>
